@@ -10,7 +10,7 @@ const app = express();
 
 // Enable CORS for frontend running at localhost:5173
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: '*',
   'https://dynamic-cranachan-2e287d.netlify.app'
 
   credentials: true,
