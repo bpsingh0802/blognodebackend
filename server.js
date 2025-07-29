@@ -9,19 +9,22 @@ dotenv.config();
 const app = express();
 
 // Enable CORS for frontend running at localhost:5173
-app.use(cors({
-  origin: '*',
-  'https://dynamic-cranachan-2e287d.netlify.app'
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://dynamic-cranachan-2e287d.netlify.app',
+];
 
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 
-// Add COOP & COEP headers for Google OAuth popup
-app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
-  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-  next();
-});
 
 // Serve static files from uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
